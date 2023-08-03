@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import words from "./wordList.json";
-import { HangmanDrawing, HangmanWord, Keyboard } from "./components";
+import { HangmanDrawing, HangmanWord, Keyboard, Modal } from "./components";
 
 const getWord = () => {
   return words[Math.floor(Math.random() * words.length)];
@@ -9,6 +9,7 @@ const getWord = () => {
 const App = () => {
   const [wordToGuess, setWordToGuess] = useState(getWord);
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const incorrectLetters = guessedLetters.filter(
     (letter) => !wordToGuess.includes(letter)
@@ -53,6 +54,9 @@ const App = () => {
       e.preventDefault();
       setGuessedLetters([]);
       setWordToGuess(getWord());
+      if (isLoser) {
+        setIsModalOpen(true);
+      }
     };
     document.addEventListener("keypress", handler);
 
@@ -63,19 +67,13 @@ const App = () => {
 
   return (
     <>
-      <div
-        style={{
-          maxWidth: "800px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "2rem",
-          margin: "0 auto",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ fontSize: "2rem", textAlign: "center" }}>
-          {isWinner && "Felicidades, ganaste esta ronda"}
-          {isLoser && "Que pena, perdiste! Sigue intentando"}
+      <div className="max-w-[800px] flex flex-col gap-2 mx-auto items-center mt-10">
+        <h1 className="font-extrabold text-6xl uppercase mb-5">
+          Juego del <span className="text-indigo-600">ahorcado</span>
+        </h1>
+        <div className="text-4xl text-center">
+          {isLoser && <Modal message="Que pena, perdiste! Sigue intentando" />}
+          {isWinner && <Modal message="Felicidades, ganaste esta ronda" />}
         </div>
         <HangmanDrawing numberOfGuesses={incorrectLetters.length} />
         <HangmanWord

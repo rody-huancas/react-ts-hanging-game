@@ -1,33 +1,4 @@
-import styles from "./Keyboard.module.css";
-
-const KEYS = [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z",
-];
+import { KEYS } from "../helpers/keys";
 
 type KeyboardProps = {
   disabled?: boolean;
@@ -43,22 +14,16 @@ export const Keyboard = ({
   disabled = false,
 }: KeyboardProps) => {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(75px, 1fr))",
-        gap: ".5rem",
-      }}
-    >
+    <div className="grid grid-cols-9 gap-4">
       {KEYS.map((key) => {
         const isActive = activeLetters.includes(key);
         const isInactive = inactiveLetters.includes(key);
         return (
           <button
             onClick={() => addGuessedLetter(key)}
-            className={`${styles.btn} ${isActive ? styles.active : ""} ${
-              isInactive ? styles.inactive : ""
-            }`}
+            className={`w-[100%] border-[3px] border-solid border-black text-4xl uppercase px-2 py-3 font-bold cursor-pointer text-black mt-3  ${
+              isActive ? "bg-blue-600 text-white" : ""
+            } ${isInactive ? "bg-red-600 text-white" : ""}`}
             disabled={isInactive || isActive || disabled}
             key={key}
           >
